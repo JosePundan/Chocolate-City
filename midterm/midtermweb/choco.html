@@ -1,0 +1,2014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOIR Chocolate Store | Premium Imported Sweets</title>
+    <!-- Google Fonts & Font Awesome Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* ==========================================================================
+           1. CORE STYLES & CSS VARIABLES
+           ========================================================================== */
+        :root {
+            --bg-primary: #120B08;
+            --bg-card: #1A100C;
+            --bg-accent: #0B2115;
+            --text-gold: #FFDB6B;
+            --text-light: #F3E6D0;
+            --text-muted: #A99A86;
+            --brand-red: #E84B43;
+            --brand-red-hover: #B92F2A;
+            --border-color: #3A2920;
+            --font-heading: 'Playfair Display', Georgia, serif;
+            --font-body: 'Outfit', sans-serif;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-family: var(--font-body);
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3A2920;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--brand-red);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 25px;
+            width: 100%;
+        }
+
+        /* SPA Page Visibility Router Styles */
+        .page-view {
+            display: none;
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            flex: 1;
+        }
+
+        .page-view.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ==========================================================================
+           2. NAVIGATION & HEADER
+           ========================================================================== */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(18, 11, 8, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: auto;
+            height: 80px;
+            padding: 0 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            color: var(--text-gold);
+            text-decoration: none;
+            font-family: var(--font-heading);
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .logo span {
+            color: var(--brand-red);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            list-style: none;
+        }
+
+        .nav-link {
+            color: var(--text-light);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: 1px;
+            transition: var(--transition);
+            position: relative;
+            cursor: pointer;
+            padding: 5px 0;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--brand-red);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--brand-red);
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .cart-btn {
+            background: transparent;
+            border: 1px solid var(--text-gold);
+            color: var(--text-gold);
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .cart-btn:hover {
+            background: var(--brand-red);
+            border-color: var(--brand-red);
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
+
+        .cart-count-badge {
+            background: var(--brand-red);
+            color: white;
+            font-size: 11px;
+            padding: 2px 7px;
+            border-radius: 50px;
+        }
+
+        .cart-btn:hover .cart-count-badge {
+            background: white;
+            color: var(--brand-red);
+        }
+
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        /* ==========================================================================
+           3. HERO & HOME PAGE SECTION
+           ========================================================================== */
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            max-width: 1200px;
+            margin: auto;
+            padding: 60px 25px;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 750px;
+            z-index: 2;
+        }
+
+        .small-text {
+            color: var(--brand-red);
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 5px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-family: var(--font-heading);
+            font-size: clamp(48px, 7vw, 100px);
+            line-height: 0.95;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: var(--text-gold);
+            font-style: italic;
+        }
+
+        .hero-description {
+            max-width: 520px;
+            margin-bottom: 40px;
+            color: var(--text-muted);
+            font-size: 18px;
+            font-weight: 300;
+        }
+
+        .hero-btns {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .main-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 36px;
+            background: var(--brand-red);
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-radius: 4px;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+        }
+
+        .main-btn:hover {
+            background: var(--brand-red-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(232, 75, 67, 0.2);
+        }
+
+        .secondary-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 36px;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-radius: 4px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .secondary-btn:hover {
+            border-color: var(--text-gold);
+            color: var(--text-gold);
+        }
+
+        /* Features Highlights */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            padding: 60px 0;
+            border-top: 1px solid var(--border-color);
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            border-color: var(--brand-red);
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 32px;
+            color: var(--text-gold);
+            margin-bottom: 15px;
+        }
+
+        .feature-card h3 {
+            font-family: var(--font-heading);
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: var(--text-light);
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* ==========================================================================
+           4. SHOP / PRODUCTS PAGE (Search, Filter, Grid, Modals)
+           ========================================================================== */
+        .shop-header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 30px;
+            background: var(--bg-card);
+            padding: 20px 25px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 250px;
+            max-width: 400px;
+        }
+
+        .search-box input {
+            width: 100%;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            padding: 12px 16px 12px 42px;
+            color: var(--text-light);
+            border-radius: 30px;
+            font-family: var(--font-body);
+            font-size: 14px;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--brand-red);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        .category-filter {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: var(--font-body);
+            font-size: 13px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--brand-red);
+            color: white;
+            border-color: var(--brand-red);
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .product-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-card:hover {
+            border-color: var(--brand-red);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .product-image {
+            height: 240px;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+            background: #21130E;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.08);
+        }
+
+        .badge-tag {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(18, 11, 8, 0.85);
+            color: var(--text-gold);
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid rgba(255, 219, 107, 0.3);
+        }
+
+        .product-info {
+            padding: 10px 0 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .product-info h3 {
+            font-family: var(--font-heading);
+            font-size: 19px;
+            margin-bottom: 5px;
+            color: var(--text-light);
+            cursor: pointer;
+        }
+
+        .product-info h3:hover {
+            color: var(--text-gold);
+        }
+
+        .product-info p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .price {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-gold);
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .add-cart-btn {
+            flex: 1;
+            padding: 12px;
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-light);
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .add-cart-btn:hover {
+            background: var(--brand-red);
+            border-color: var(--brand-red);
+            color: white;
+        }
+
+        .quick-view-btn {
+            padding: 12px 15px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .quick-view-btn:hover {
+            color: var(--text-gold);
+            border-color: var(--text-gold);
+        }
+
+        /* ==========================================================================
+           5. ABOUT US PAGE
+           ========================================================================== */
+        .about-section {
+            padding: 40px 0 80px;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .about-text-content p.tagline {
+            color: var(--brand-red);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .about-text-content h2 {
+            font-family: var(--font-heading);
+            font-size: 42px;
+            line-height: 1.2;
+            margin-bottom: 25px;
+            color: var(--text-light);
+        }
+
+        .about-text-content p.description {
+            color: var(--text-muted);
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 25px;
+        }
+
+        .history-box {
+            background: var(--bg-card);
+            border-left: 3px solid var(--text-gold);
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .history-box h4 {
+            color: var(--text-gold);
+            font-size: 16px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .history-box p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            text-align: center;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 20px 10px;
+            border-radius: 6px;
+        }
+
+        .stat-card h3 {
+            color: var(--text-gold);
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .stat-card p {
+            color: var(--text-muted);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .about-image {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* ==========================================================================
+           6. CONTACT US PAGE & FORM VALIDATION
+           ========================================================================== */
+        .contact-section {
+            padding: 40px 0 80px;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+        }
+
+        .contact-info h2 {
+            font-family: var(--font-heading);
+            font-size: 38px;
+            margin-bottom: 20px;
+            color: var(--text-light);
+        }
+
+        .contact-info p.lead {
+            color: var(--text-muted);
+            margin-bottom: 35px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .info-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--brand-red);
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .info-details h4 {
+            color: var(--text-light);
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .info-details p, .info-details a {
+            color: var(--text-muted);
+            font-size: 14px;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .info-details a:hover {
+            color: var(--brand-red);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .social-btn {
+            width: 40px;
+            height: 40px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-btn:hover {
+            background: var(--brand-red);
+            border-color: var(--brand-red);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .contact-form {
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .contact-form h3 {
+            font-family: var(--font-heading);
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: var(--text-gold);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-control {
+            width: 100%;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            padding: 12px 16px;
+            color: var(--text-light);
+            border-radius: 6px;
+            font-family: var(--font-body);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--brand-red);
+            box-shadow: 0 0 0 2px rgba(232, 75, 67, 0.2);
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--brand-red);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .submit-btn:hover {
+            background: var(--brand-red-hover);
+        }
+
+        /* ==========================================================================
+           7. LOCATION PAGE
+           ========================================================================== */
+        .location-section {
+            padding: 40px 0 80px;
+        }
+
+        .section-title {
+            margin-bottom: 30px;
+        }
+
+        .section-title p {
+            color: var(--brand-red);
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 3px;
+        }
+
+        .section-title h2 {
+            font-family: var(--font-heading);
+            font-size: 40px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-light);
+        }
+
+        .map-container {
+            width: 100%;
+            height: 400px;
+            background: #18120F;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .map-placeholder {
+            text-align: center;
+            padding: 30px;
+            max-width: 500px;
+        }
+
+        .map-placeholder i {
+            font-size: 52px;
+            color: var(--brand-red);
+            margin-bottom: 15px;
+        }
+
+        .map-placeholder h4 {
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .map-placeholder p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .hours-badge {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 6px 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--text-gold);
+            color: var(--text-gold);
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* ==========================================================================
+           8. CART SLIDE-OUT, PRODUCT DETAIL & CHECKOUT MODALS
+           ========================================================================== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-center-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 2100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .modal-center-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .cart-sidebar {
+            width: 100%;
+            max-width: 450px;
+            height: 100%;
+            background: var(--bg-card);
+            border-left: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            transform: translateX(100%);
+            transition: var(--transition);
+        }
+
+        .modal-overlay.active .cart-sidebar {
+            transform: translateX(0);
+        }
+
+        .cart-header {
+            padding: 25px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-header h3 {
+            font-family: var(--font-heading);
+            font-size: 22px;
+            color: var(--text-gold);
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 24px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .close-cart:hover {
+            color: var(--brand-red);
+        }
+
+        /* Free Shipping Bar */
+        .shipping-progress-container {
+            padding: 15px 25px;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .shipping-text {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 6px;
+            background: #251711;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--brand-red);
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .cart-body {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 15px;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(58, 41, 32, 0.5);
+            align-items: center;
+        }
+
+        .cart-item-img {
+            width: 70px;
+            height: 70px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+
+        .cart-item-info {
+            flex: 1;
+        }
+
+        .cart-item-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 4px;
+        }
+
+        .cart-item-price {
+            color: var(--text-gold);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .qty-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .qty-btn {
+            width: 24px;
+            height: 24px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: var(--text-light);
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qty-btn:hover {
+            border-color: var(--brand-red);
+            color: var(--brand-red);
+        }
+
+        .qty-count {
+            font-size: 13px;
+            font-weight: 600;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .remove-item {
+            color: #7f8c82;
+            cursor: pointer;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .remove-item:hover {
+            color: var(--brand-red);
+        }
+
+        .cart-footer {
+            padding: 25px;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-primary);
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-light);
+        }
+
+        .total-row span:last-child {
+            color: var(--text-gold);
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--brand-red);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .checkout-btn:hover {
+            background: var(--brand-red-hover);
+        }
+
+        .empty-cart-msg {
+            text-align: center;
+            padding: 40px 0;
+            color: var(--text-muted);
+        }
+
+        /* Modal Dialog Box */
+        .modal-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            max-width: 550px;
+            width: 100%;
+            padding: 30px;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-box .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        .modal-box .close-btn:hover {
+            color: var(--brand-red);
+        }
+
+        /* Quick View Modal Content */
+        .qv-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .qv-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .qv-details h3 {
+            font-family: var(--font-heading);
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .qv-details p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+        }
+
+        .qv-details .price {
+            font-size: 22px;
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        /* Checkout Receipt Modal */
+        .receipt-header {
+            text-align: center;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .receipt-header i {
+            font-size: 45px;
+            color: var(--text-gold);
+            margin-bottom: 10px;
+        }
+
+        .receipt-items {
+            margin-bottom: 20px;
+        }
+
+        .receipt-item-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: var(--text-muted);
+        }
+
+        .receipt-total {
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-gold);
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--brand-red);
+            color: white;
+            padding: 14px 24px;
+            border-radius: 6px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            font-weight: 500;
+            font-size: 14px;
+            z-index: 3000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* ==========================================================================
+           9. FOOTER
+           ========================================================================== */
+        footer {
+            background: var(--bg-accent);
+            border-top: 1px solid #263D2D;
+            padding: 60px 25px 30px;
+            margin-top: auto;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 40px;
+        }
+
+        footer h2 {
+            font-family: var(--font-heading);
+            color: var(--text-gold);
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        footer p {
+            color: #7F8C82;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .footer-links-title {
+            color: var(--text-light);
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer-links a {
+            color: #9BA79E;
+            text-decoration: none;
+            font-size: 14px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .footer-links a:hover {
+            color: var(--brand-red);
+            padding-left: 5px;
+        }
+
+        .copyright {
+            max-width: 1200px;
+            margin: 40px auto 0;
+            padding-top: 25px;
+            border-top: 1px solid #263D2D;
+            text-align: center;
+            color: #5d6861;
+            font-size: 13px;
+        }
+
+        /* ==========================================================================
+           10. RESPONSIVE MEDIA QUERIES
+           ========================================================================== */
+        @media (max-width: 992px) {
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .about-grid, .contact-grid, .features-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+            .qv-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 80px);
+                background: var(--bg-primary);
+                flex-direction: column;
+                padding: 40px;
+                transition: var(--transition);
+                border-top: 1px solid var(--border-color);
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .shop-header-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-box {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navigation Bar -->
+    <header>
+        <nav class="navbar">
+            <a class="logo" onclick="switchPage('home')">
+                <i class="fa-solid fa-cookie-bite"></i> NOIR<span>.</span>
+            </a>
+
+            <ul class="nav-links" id="navLinks">
+                <li><a class="nav-link active" data-target="home" onclick="switchPage('home')">Home</a></li>
+                <li><a class="nav-link" data-target="shop" onclick="switchPage('shop')">Shop Collection</a></li>
+                <li><a class="nav-link" data-target="about" onclick="switchPage('about')">About Us</a></li>
+                <li><a class="nav-link" data-target="contact" onclick="switchPage('contact')">Contact Us</a></li>
+                <li><a class="nav-link" data-target="location" onclick="switchPage('location')">Location</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <button class="cart-btn" id="openCartBtn">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span>Cart</span>
+                    <span class="cart-count-badge" id="cartCount">0</span>
+                </button>
+                <button class="mobile-toggle" id="mobileToggle">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Views Container -->
+    <main>
+
+        <!-- PAGE 1: HOME PAGE VIEW -->
+        <section class="page-view active" id="page-home">
+            <div class="hero">
+                <div class="hero-content">
+                    <p class="small-text">PREMIUM IMPORTED SWEETS</p>
+                    <h1>
+                        CHOCOLATE.<br>
+                        CITY.<br>
+                        <span>LUCENA.</span>
+                    </h1>
+                    <p class="hero-description">
+                        Discover carefully selected imported chocolates, candies, and artisanal drinks crafted for true connoisseurs—at direct wholesale prices lower than shopping malls.
+                    </p>
+                    <div class="hero-btns">
+                        <button class="main-btn" onclick="switchPage('shop')">
+                            Shop Collection <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                        <button class="secondary-btn" onclick="switchPage('about')">
+                            Our Story
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="fa-solid fa-plane-arrival feature-icon"></i>
+                        <h3>100% Directly Imported</h3>
+                        <p>Authentic Swiss, European, and Japanese confections delivered weekly directly to Lucena.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fa-solid fa-tags feature-icon"></i>
+                        <h3>Lower Than Mall Prices</h3>
+                        <p>Enjoy wholesale rate savings compared to standard shopping center confectionery prices.</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fa-solid fa-mug-hot feature-icon"></i>
+                        <h3>Fresh Cocoa Brews</h3>
+                        <p>Artisanal hot chocolates, iced beverages, and cold brews prepared fresh daily on site.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 2: PRODUCTS / SHOP PAGE VIEW -->
+        <section class="page-view" id="page-shop">
+            <div class="container" style="padding-top: 40px; padding-bottom: 80px;">
+                <div class="section-title">
+                    <p>01 / CURATED MENU</p>
+                    <h2>Signature Sweets & Drinks</h2>
+                    <span>Explore our full range of imported confections and beverages.</span>
+                </div>
+
+                <!-- Search and Category Filters Header Bar -->
+                <div class="shop-header-bar">
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="searchInput" placeholder="Search sweets, chocolates, drinks..." onkeyup="filterProducts()">
+                    </div>
+
+                    <div class="category-filter">
+                        <button class="filter-btn active" data-filter="all" onclick="setCategory('all', this)">All Items</button>
+                        <button class="filter-btn" data-filter="chocolate" onclick="setCategory('chocolate', this)">Chocolates</button>
+                        <button class="filter-btn" data-filter="candy" onclick="setCategory('candy', this)">Candies</button>
+                        <button class="filter-btn" data-filter="drinks" onclick="setCategory('drinks', this)">Artisan Drinks</button>
+                    </div>
+                </div>
+
+                <!-- Dynamic Shop Product Grid -->
+                <div class="product-grid" id="productGrid">
+                    <!-- Products dynamically rendered by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 3: ABOUT US PAGE VIEW -->
+        <section class="page-view" id="page-about">
+            <div class="container">
+                <div class="about-section">
+                    <div class="about-grid">
+                        <div class="about-text-content">
+                            <p class="tagline">ABOUT NOIR STORE</p>
+                            <h2>Good chocolate doesn't need to be complicated.</h2>
+                            <p class="description">
+                                Established with a love for authentic cocoa, NOIR started as a boutique confectionery stall in Lucena City. Our vision is simple: to make world-class European and Swiss chocolates accessible locally without the heavy retail markup found in big shopping centers.
+                            </p>
+
+                            <div class="history-box">
+                                <h4><i class="fa-solid fa-timeline"></i> Store Profile & Heritage</h4>
+                                <p>Founded in 2024 by Jose Pundan, NOIR has served thousands of sweet lovers across Quezon Province with directly imported items, fresh artisan brews, and curated candy gift boxes.</p>
+                            </div>
+
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <h3>100%</h3>
+                                    <p>Authentic</p>
+                                </div>
+                                <div class="stat-card">
+                                    <h3>50+</h3>
+                                    <p>Varieties</p>
+                                </div>
+                                <div class="stat-card">
+                                    <h3>₱ Lower</h3>
+                                    <p>Than Malls</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="about-image">
+                            <img src="https://images.unsplash.com/photo-1511381939415-e44015466834?auto=format&fit=crop&w=800&q=80" alt="NOIR Chocolate Crafting" onerror="this.src='https://placehold.co/800x1000/1A100C/F3E6D0?text=NOIR+Craftsmanship'">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 4: CONTACT US PAGE VIEW -->
+        <section class="page-view" id="page-contact">
+            <div class="container">
+                <div class="contact-section">
+                    <div class="contact-grid">
+                        
+                        <div class="contact-info">
+                            <p class="small-text">GET IN TOUCH</p>
+                            <h2>Visit Us or Place an Order Direct</h2>
+                            <p class="lead">Have questions or custom catering requests? Send us a message or reach out through our channels below.</p>
+
+                            <div class="info-item">
+                                <div class="info-icon"><i class="fa-solid fa-location-dot"></i></div>
+                                <div class="info-details">
+                                    <h4>Store Address</h4>
+                                    <p>Quezon Avenue, Brgy. Poblacion, Lucena City, Quezon 4301, Philippines</p>
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-icon"><i class="fa-solid fa-phone"></i></div>
+                                <div class="info-details">
+                                    <h4>Phone & Cellphone</h4>
+                                    <p>Mobile: +63 912 345 6789</p>
+                                    <p>Telephone: (042) 710-9876</p>
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-icon"><i class="fa-solid fa-envelope"></i></div>
+                                <div class="info-details">
+                                    <h4>Email Address</h4>
+                                    <p>hello@noirchocolate.ph</p>
+                                </div>
+                            </div>
+
+                            <div class="social-links">
+                                <a href="#" class="social-btn" title="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+                                <a href="#" class="social-btn" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+                                <a href="#" class="social-btn" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="contact-form">
+                            <h3>Send Us a Message</h3>
+                            <form id="contactForm" onsubmit="handleContactSubmit(event)">
+                                <div class="form-group">
+                                    <label for="fullName">Full Name</label>
+                                    <input type="text" id="fullName" class="form-control" placeholder="e.g. Maria Santos" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="emailAddr">Email Address</label>
+                                    <input type="email" id="emailAddr" class="form-control" placeholder="e.g. maria@example.com" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="phoneNum">Contact Number</label>
+                                    <input type="tel" id="phoneNum" class="form-control" placeholder="09123456789" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="message">Message</label>
+                                    <textarea id="message" class="form-control" placeholder="How can we help you today?" required></textarea>
+                                </div>
+
+                                <button type="submit" class="submit-btn">
+                                    <i class="fa-solid fa-paper-plane"></i> Send Message
+                                </button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE 5: STORE LOCATION PAGE VIEW -->
+        <section class="page-view" id="page-location">
+            <div class="container">
+                <div class="location-section">
+                    <div class="section-title">
+                        <p>03 / STORE LOCATION</p>
+                        <h2>Find Us in Lucena City</h2>
+                        <span>Conveniently located in the heart of Lucena City.</span>
+                    </div>
+
+                    <div class="map-container">
+                        <div class="map-placeholder">
+                            <i class="fa-solid fa-map-location-dot"></i>
+                            <h4>NOIR Flagship Store - Lucena City</h4>
+                            <p>Quezon Avenue, Near City Plaza, Lucena City, Quezon Province</p>
+                            <div>
+                                <span class="hours-badge">Store Hours: 9:00 AM - 8:00 PM (Mon - Sun)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Shopping Cart Slide-out Drawer Modal -->
+    <div class="modal-overlay" id="cartModal">
+        <div class="cart-sidebar">
+            <div class="cart-header">
+                <h3>Your Cart (<span id="cartHeaderCount">0</span>)</h3>
+                <button class="close-cart" id="closeCartBtn">&times;</button>
+            </div>
+
+            <!-- Free Shipping Bar (Threshold: ₱1,000) -->
+            <div class="shipping-progress-container">
+                <div class="shipping-text">
+                    <span id="shippingText">Add ₱1,000 for FREE delivery!</span>
+                    <span id="shippingPct">0%</span>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="shippingBarFill"></div>
+                </div>
+            </div>
+
+            <div class="cart-body" id="cartItemsContainer">
+                <div class="empty-cart-msg">
+                    <i class="fa-solid fa-basket-shopping" style="font-size: 40px; margin-bottom: 10px; opacity: 0.5;"></i>
+                    <p>Your cart is currently empty.</p>
+                </div>
+            </div>
+
+            <div class="cart-footer">
+                <div class="total-row">
+                    <span>Total Amount:</span>
+                    <span id="cartTotal">₱0</span>
+                </div>
+                <button class="checkout-btn" onclick="openCheckoutModal()">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick View Product Detail Modal -->
+    <div class="modal-center-overlay" id="quickViewModal">
+        <div class="modal-box">
+            <button class="close-btn" onclick="closeQuickView()">&times;</button>
+            <div class="qv-grid" id="qvContent">
+                <!-- Quick view details dynamically populated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Receipt Confirmation Modal -->
+    <div class="modal-center-overlay" id="checkoutModal">
+        <div class="modal-box">
+            <button class="close-btn" onclick="closeCheckoutModal()">&times;</button>
+            <div class="receipt-header">
+                <i class="fa-solid fa-circle-check"></i>
+                <h3 style="font-family: var(--font-heading); font-size: 24px; color: var(--text-light);">Order Confirmed!</h3>
+                <p style="color: var(--text-muted); font-size: 13px; margin-top: 5px;">Thank you for shopping at NOIR Lucena.</p>
+            </div>
+            
+            <div class="receipt-items" id="receiptItems">
+                <!-- Items list -->
+            </div>
+
+            <div class="receipt-total">
+                <span>Total Amount Paid:</span>
+                <span id="receiptTotal">₱0</span>
+            </div>
+
+            <button class="submit-btn" style="margin-top: 25px;" onclick="closeCheckoutModal()">Done</button>
+        </div>
+    </div>
+
+    <!-- Toast Popup Notification -->
+    <div class="toast" id="toastNotification">
+        <i class="fa-solid fa-circle-check"></i>
+        <span id="toastMessage">Item added to cart!</span>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div>
+                <h2>NOIR.</h2>
+                <p>Premium Imported Sweets & Artisanal Drinks in Lucena City. Cheaper than mall retail prices.</p>
+            </div>
+
+            <div>
+                <div class="footer-links-title">Quick Links</div>
+                <div class="footer-links">
+                    <a onclick="switchPage('home')">Home</a>
+                    <a onclick="switchPage('shop')">Shop Collection</a>
+                    <a onclick="switchPage('about')">About Us</a>
+                    <a onclick="switchPage('contact')">Contact Us</a>
+                    <a onclick="switchPage('location')">Location</a>
+                </div>
+            </div>
+
+            <div>
+                <div class="footer-links-title">Categories</div>
+                <div class="footer-links">
+                    <a onclick="switchPage('shop'); setCategory('chocolate')">Imported Chocolates</a>
+                    <a onclick="switchPage('shop'); setCategory('candy')">Gummy & Hard Candies</a>
+                    <a onclick="switchPage('shop'); setCategory('drinks')">Hot & Cold Cocoa Drinks</a>
+                </div>
+            </div>
+        </div>
+
+        <p class="copyright">
+            © 2026 NOIR Chocolate City - Lucena | Created by Jose Pundan
+        </p>
+    </footer>
+
+    <!-- Interactive JavaScript Logic -->
+    <script>
+        // Products Catalog Data
+        const productsData = [
+            { id: 1, name: 'Classic Dark Bar', category: 'chocolate', price: 180, tag: 'Bestseller', desc: '70% Single-Origin Swiss Dark Cocoa with complex bittersweet notes.', img: 'https://images.unsplash.com/photo-1548907040-4baa42d10919?auto=format&fit=crop&w=600&q=80' },
+            { id: 2, name: 'Swiss Milk Chocolate', category: 'chocolate', price: 150, tag: 'Imported', desc: 'Ultra smooth, creamy texture sourced directly from Alpine milk producers.', img: 'https://images.unsplash.com/photo-1549007994-cb92caebd54b?auto=format&fit=crop&w=600&q=80' },
+            { id: 3, name: 'Hazelnut Crunch', category: 'chocolate', price: 220, tag: 'Popular', desc: 'Loaded with whole roasted hazelnut chunks wrapped in rich cocoa.', img: 'https://images.unsplash.com/photo-1606312619070-d48b4c652a52?auto=format&fit=crop&w=600&q=80' },
+            { id: 4, name: 'Fruit Gummies', category: 'candy', price: 120, tag: 'Sweet', desc: 'Made with genuine concentrated tropical fruit juices and natural honey.', img: 'https://images.unsplash.com/photo-1582058091505-f87a2e55a40f?auto=format&fit=crop&w=600&q=80' },
+            { id: 5, name: 'Peppermint Drops', category: 'candy', price: 95, tag: 'Fresh', desc: 'Refreshing cooling menthol burst in smooth hard-boiled drops.', img: 'https://images.unsplash.com/photo-1575224300306-1b8da36134ec?auto=format&fit=crop&w=600&q=80' },
+            { id: 6, name: 'Salted Caramel Bites', category: 'candy', price: 130, tag: 'Rich', desc: 'Soft chewy caramel dusted with artisanal sea salt crystals.', img: 'https://images.unsplash.com/photo-1581798459219-318e76aecc7b?auto=format&fit=crop&w=600&q=80' },
+            { id: 7, name: 'Belgian Hot Chocolate', category: 'drinks', price: 140, tag: 'Hot Brew', desc: 'Steamed whole milk blended with melted 70% dark Belgian cocoa.', img: 'https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?auto=format&fit=crop&w=600&q=80' },
+            { id: 8, name: 'Signature Iced Cocoa', category: 'drinks', price: 130, tag: 'Chilled', desc: 'Rich chilled cocoa served over ice with a light velvety milk top.', img: 'https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=600&q=80' },
+            { id: 9, name: 'Dark Espresso Mocha', category: 'drinks', price: 160, tag: 'Specialty', desc: 'Double shot Arabica espresso combined with premium dark chocolate sauce.', img: 'https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=600&q=80' }
+        ];
+
+        // Shopping Cart State
+        let cart = [];
+        let currentCategory = 'all';
+
+        // Initialize Product Rendering
+        window.onload = function() {
+            renderProducts(productsData);
+        };
+
+        // Router View Switcher
+        function switchPage(pageId) {
+            document.querySelectorAll('.page-view').forEach(view => {
+                view.classList.remove('active');
+            });
+            const target = document.getElementById(`page-${pageId}`);
+            if (target) {
+                target.classList.add('active');
+            }
+
+            // Update active state on Nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                if (link.getAttribute('data-target') === pageId) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+
+            // Close mobile menu
+            document.getElementById('navLinks').classList.remove('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Render Shop Products
+        function renderProducts(items) {
+            const grid = document.getElementById('productGrid');
+            if (!grid) return;
+
+            if (items.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 50px 0;">No matching sweets or drinks found.</div>`;
+                return;
+            }
+
+            grid.innerHTML = items.map(p => `
+                <div class="product-card">
+                    <div class="product-image" onclick="openQuickView(${p.id})">
+                        <span class="badge-tag">${p.tag}</span>
+                        <img src="${p.img}" alt="${p.name}" onerror="this.src='https://placehold.co/600x400/21130E/F3E6D0?text=${encodeURIComponent(p.name)}'">
+                    </div>
+                    <div class="product-info">
+                        <div>
+                            <h3 onclick="openQuickView(${p.id})">${p.name}</h3>
+                            <p>${p.desc.substring(0, 32)}...</p>
+                        </div>
+                        <span class="price">₱${p.price}</span>
+                    </div>
+                    <div class="product-actions">
+                        <button class="add-cart-btn" onclick="addToCart('${p.name}', ${p.price}, '${p.img}')">
+                            <i class="fa-solid fa-cart-plus"></i> Add
+                        </button>
+                        <button class="quick-view-btn" onclick="openQuickView(${p.id})" title="Quick View">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter and Search Logic
+        function filterProducts() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = productsData.filter(p => {
+                const matchesCat = (currentCategory === 'all' || p.category === currentCategory);
+                const matchesSearch = p.name.toLowerCase().includes(query) || p.desc.toLowerCase().includes(query);
+                return matchesCat && matchesSearch;
+            });
+            renderProducts(filtered);
+        }
+
+        function setCategory(cat, btnElem) {
+            currentCategory = cat;
+            if (btnElem) {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btnElem.classList.add('active');
+            }
+            filterProducts();
+        }
+
+        // Shopping Cart Logic
+        const cartModal = document.getElementById('cartModal');
+        document.getElementById('openCartBtn').addEventListener('click', () => cartModal.classList.add('active'));
+        document.getElementById('closeCartBtn').addEventListener('click', () => cartModal.classList.remove('active'));
+        cartModal.addEventListener('click', (e) => {
+            if (e.target === cartModal) cartModal.classList.remove('active');
+        });
+
+        // Mobile Nav Toggle
+        document.getElementById('mobileToggle').addEventListener('click', () => {
+            document.getElementById('navLinks').classList.toggle('active');
+        });
+
+        function addToCart(title, price, image) {
+            const existing = cart.find(item => item.title === title);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                cart.push({ title, price, image, qty: 1 });
+            }
+            updateCartUI();
+            showToast(`Added "${title}" to cart!`);
+        }
+
+        function updateCartUI() {
+            const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+            document.getElementById('cartCount').textContent = totalItems;
+            document.getElementById('cartHeaderCount').textContent = totalItems;
+            document.getElementById('cartTotal').textContent = `₱${totalPrice}`;
+
+            // Update Free Shipping Progress (Threshold: ₱1,000)
+            const threshold = 1000;
+            const pct = Math.min(100, Math.round((totalPrice / threshold) * 100));
+            document.getElementById('shippingBarFill').style.width = `${pct}%`;
+            document.getElementById('shippingPct').textContent = `${pct}%`;
+            
+            if (totalPrice >= threshold) {
+                document.getElementById('shippingText').textContent = "🎉 You unlocked FREE delivery!";
+            } else {
+                document.getElementById('shippingText').textContent = `Add ₱${threshold - totalPrice} more for FREE delivery!`;
+            }
+
+            const container = document.getElementById('cartItemsContainer');
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-cart-msg">
+                        <i class="fa-solid fa-basket-shopping" style="font-size: 40px; margin-bottom: 10px; opacity: 0.5;"></i>
+                        <p>Your cart is currently empty.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = cart.map((item, index) => `
+                <div class="cart-item">
+                    <img src="${item.image}" alt="${item.title}" class="cart-item-img">
+                    <div class="cart-item-info">
+                        <div class="cart-item-title">${item.title}</div>
+                        <div class="cart-item-price">₱${item.price}</div>
+                        <div class="qty-controls">
+                            <button class="qty-btn" onclick="changeQty(${index}, -1)">-</button>
+                            <span class="qty-count">${item.qty}</span>
+                            <button class="qty-btn" onclick="changeQty(${index}, 1)">+</button>
+                        </div>
+                    </div>
+                    <i class="fa-solid fa-trash-can remove-item" onclick="removeItem(${index})"></i>
+                </div>
+            `).join('');
+        }
+
+        function changeQty(index, delta) {
+            cart[index].qty += delta;
+            if (cart[index].qty <= 0) cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function removeItem(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        // Quick View Modal
+        function openQuickView(productId) {
+            const product = productsData.find(p => p.id === productId);
+            if (!product) return;
+
+            const content = document.getElementById('qvContent');
+            content.innerHTML = `
+                <img src="${product.img}" alt="${product.name}" class="qv-img">
+                <div class="qv-details">
+                    <h3>${product.name}</h3>
+                    <p>${product.desc}</p>
+                    <span class="price">₱${product.price}</span>
+                    <button class="add-cart-btn" onclick="addToCart('${product.name}', ${product.price}, '${product.img}'); closeQuickView();">
+                        <i class="fa-solid fa-cart-plus"></i> Add to Cart
+                    </button>
+                </div>
+            `;
+            document.getElementById('quickViewModal').classList.add('active');
+        }
+
+        function closeQuickView() {
+            document.getElementById('quickViewModal').classList.remove('active');
+        }
+
+        // Checkout Receipt Modal
+        function openCheckoutModal() {
+            if (cart.length === 0) {
+                showToast("Your cart is empty!");
+                return;
+            }
+
+            const itemsContainer = document.getElementById('receiptItems');
+            const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+            itemsContainer.innerHTML = cart.map(item => `
+                <div class="receipt-item-row">
+                    <span>${item.qty}x ${item.title}</span>
+                    <span>₱${item.price * item.qty}</span>
+                </div>
+            `).join('');
+
+            document.getElementById('receiptTotal').textContent = `₱${total}`;
+            cartModal.classList.remove('active');
+            document.getElementById('checkoutModal').classList.add('active');
+
+            // Reset cart state after order completion
+            cart = [];
+            updateCartUI();
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkoutModal').classList.remove('active');
+        }
+
+        // Toast Popup Notification
+        function showToast(msg) {
+            const toast = document.getElementById('toastNotification');
+            document.getElementById('toastMessage').textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // Form Validation & Submission
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('fullName').value;
+            showToast(`Thank you, ${name}! Message sent successfully.`);
+            document.getElementById('contactForm').reset();
+        }
+    </script>
+</body>
+</html>

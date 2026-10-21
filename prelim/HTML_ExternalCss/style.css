@@ -1,0 +1,146 @@
+
+/* =====================================
+   Universal Selector
+===================================== */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+
+/* =====================================
+   Element Selector
+===================================== */
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background: burlywood;
+    color:black;
+}
+
+
+header{
+    background: maroon;
+    color:white;
+    padding:20px;
+    text-align:center;
+}
+
+
+nav{
+    background:goldenrod;
+    padding:15px;
+}
+
+
+section{
+    margin:20px;
+    padding:20px;
+}
+
+
+/* =====================================
+   ID Selector
+===================================== */
+#logo{
+    font: size 50px;;
+}
+
+
+#welcome{
+    background: maroon;
+}
+
+
+/* =====================================
+   Class Selector
+===================================== */
+.card{
+    background:maroon;
+    border-radius:10px;
+    margin:20px;
+    padding:20px;
+    box-shadow:0px 2px 5px rgba(0,0,0,.2);
+}
+
+
+.btn{
+    background:#3498db;
+    color:white;
+    border:none;
+    padding:10px 20px;
+    cursor:pointer;
+    margin-top:10px;
+}
+
+
+/* =====================================
+   Group Selector
+===================================== */
+h1, h2{
+    margin-bottom:10px;
+}
+
+
+/* =====================================
+   Descendant Selector
+===================================== */
+nav ul li a{
+    color:white;
+    text-decoration:none;
+}
+
+
+/* =====================================
+   Child Selector
+===================================== */
+header > p{
+    font-style:italic;
+}
+
+
+/* =====================================
+   Hover Pseudo-class
+===================================== */
+.btn:hover{
+    background:#2980b9;
+}
+
+
+nav ul li a:hover{
+    color:black;
+}
+
+
+/* =====================================
+   Attribute Selector
+===================================== */
+input[type="text"]{
+    width:250px;
+    padding:10px;
+    border:1px solid gray;
+    border-radius:5px;
+}
+
+
+/* =====================================
+   Pseudo-element
+===================================== */
+p::first-letter{
+    font-size:24px;
+    font-weight:bold;
+    color:#3498db;
+}
+
+
+/* =====================================
+   Footer
+===================================== */
+footer{
+    background:#2c3e50;
+    color:white;
+    text-align:center;
+    padding:15px;
+    margin-top:30px;
+}
+

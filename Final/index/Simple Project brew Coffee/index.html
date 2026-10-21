@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Kape Sinta Coffee Shop</title>
+<style>
+body {background-image: url("Bg.png"); 
+      font-family: Arial, sans-serif; 
+      max-width: 480px; 
+      margin: 20px auto;
+      padding: 0 12px; }
+
+.row { display: flex; 
+      justify-content: space-between; 
+      align-items: center;
+      padding: 6px 0; 
+      border-bottom: 1px solid #e0d5c8; }
+
+button { cursor: pointer; 
+      background: #115303; 
+      color: white; 
+      border: none;
+      border-radius: 4px; 
+      padding: 6px 10px; }
+
+input { padding: 6px; 
+      margin-right: 6px; }
+
+#total { font-weight: bold; }
+
+</style>
+</head>
+<body>
+<h1> Cozy Sip Coffee Shop</h1>
+
+<h2>Menu</h2>
+<div id="menu"></div>
+
+<h2>Your Order</h2>
+<button id="clearOrder">Clear Order</button>
+<div id="cart"></div>
+<p id="total">Total: ₱0</p>
+
+<input id='name' placeholder='Your name'>
+<button id='placeOrder'>Place Order</button>
+
+
+<p id='message'></p>
+
+<script>
+// STEP 3: DATA
+const menu = [
+  { id: 1, name: 'Espresso', price: 80, },
+  { id: 2, name: 'Cappuccino', price: 110 },
+  { id: 3, name: 'Caffe Latte', price: 120 },
+  { id: 4, name: 'Iced Americano', price: 100 },
+  { id: 5, name: 'Blueberry Muffin', price: 70 },
+  { id: 6, name: 'Milk Choco', price: 120 },
+  { id: 7, name: 'Java chip', price: 159 },
+  { id: 8, name: 'Spanish latte', price: 135 },
+];
+
+let cart = [];
+
+// STEP 4: SHOW THE MENU
+function showMenu() {
+  let html = '';
+  for (const item of menu) {
+    html += `
+      <div class='row'>
+        <span>${item.name} - ₱${item.price}</span>
+        <button onclick='addToCart(${item.id})'>Add</button>
+      </div>`;
+  }
+  document.getElementById('menu').innerHTML = html;
+}
+
+// STEP 5: ADD AND REMOVE
+function addToCart(id) {
+  const item = menu.find(m => m.id === id);
+  const line = cart.find(c => c.id === id);
+
+  if (line) {
+    line.qty++;
+  } else {
+    cart.push({ id: item.id, name: item.name, price: item.price, qty: 1 });
+  }
+  showCart();
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(c => c.id !== id);
+  showCart();
+}
+
+// STEP 6: SHOW THE CART AND TOTAL
+function getTotal() {
+  let total = 0; 
+  for (const line of cart) {
+    total += line.price * line.qty;
+  }
+  return total;
+}
+// CHALLENGE NO.4 DISCOUNT 
+function getDiscount()
+{
+    let total = getTotal();
+    let discount = 0;
+
+    if (total > 500) {
+        discount = total * 0.10;
+    }
+    return total - discount;
+}
+
+function showCart() {
+  let html = '';
+  for (const line of cart) {
+    html += `
+      <div class='row'>
+        <span>${line.name} x${line.qty}</span>
+        <span>₱${line.price * line.qty}
+          <button onclick='removeFromCart(${line.id})'>Remove</button>
+        </span>
+      </div>`;
+  }
+  if (cart.length === 0) {
+    html = '<p>No items yet.</p>';
+  }
+  document.getElementById('cart').innerHTML = html;
+  document.getElementById('total').textContent = 'Subtotal: ₱' + getTotal();
+  document.getElementById('discount').textContent = 'Total Pay: ₱' + getDiscount();
+}
+
+// STEP 7: PLACE THE ORDER
+function placeOrder() {
+  const name = document.getElementById('name').value.trim();
+  const message = document.getElementById('message');
+
+  if (name === '') {
+    message.textContent = 'Please enter your name broski.';
+    return;
+  }
+  if (cart.length === 0) {
+    message.textContent = 'Your order is empty. Please add an item.';
+    return;
+  }
+
+  message.textContent = `Thank you, ${name}! Your total is ₱${getTotal()}. Discounted to 10%, So your Total Pay is ₱${getDiscount()} We are preparing your order Broski.`;
+
+  cart = [];
+  showCart();
+}
+
+// CHALLENGE NO.3 CLEAR ORDER
+function clearOrder() {
+    cart = [];
+    showCart();
+
+    document.getElementById('message').textContent =
+        'Your order has been cleared.';
+}
+
+// STEP 8: START
+document.getElementById('placeOrder').addEventListener('click', placeOrder);
+document.getElementById('clearOrder').addEventListener('click', clearOrder);
+
+showMenu();
+showCart();
+
+</script>
+</body>
+</html>

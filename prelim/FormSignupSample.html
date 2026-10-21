@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title> Employee Details</title>
+</head>
+<body>
+    <form action="/signup" method="POST">
+    <p>
+    <label>Title</label>
+    <label>
+        <input type="radio" name="title" value="mr">
+        Mr
+    </label>
+    <label>
+        <input type="radio" name="title" value="mrs">
+        Mrs
+    </label>
+    <label>
+         <input type="radio" name="title" value="miss">
+         Miss
+    </label>
+    </p>
+    <p>
+    <label>First name</label>
+    <input type="text" value="first_name">
+    </p>
+    <p>
+    <label>Last name</label>
+    <input type="text" value="last_name">
+    </p>
+    <p>
+    <label>email</label>
+    <input type="email" value="email">
+    </p>
+    <p>
+    <label>Phone Number</label>
+    <input type="tel" value="phone">
+    </p>
+    <p>
+    <label>Password</label>
+    <input type="password" value="password">
+    </p>
+    <p>
+    <label>confirm your password</label>
+    <input type="pasword" value="password_confirm">
+    </p>
+    <p>
+        <label>Country</label>
+        <select>
+            <option>Canada</option>
+            <option>France</option>
+            <option>Germany</option>
+            <option>Italy</option>
+            <option>Japan</option>
+            <option>Russia</option>
+            <option>United kingdom</option>
+            <option>United States</option>
+        </select>
+    </p>
+    <p>
+        <label>
+            <input type="checkbox" value="terms">
+            i agree to the <a href="/terms">terms and conditions</a>
+        </label>
+    </p>
+    <p>
+        <button>
+            signup
+        </button>
+    </p>
+</form>
+</body>
+</html>

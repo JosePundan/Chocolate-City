@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Kape Sinta Coffee Shop</title>
+
+<style>
+
+body {
+    background-image: url("Bg.png");
+    font-family: Arial, sans-serif;
+    max-width: 480px;
+    margin: 20px auto;
+    padding: 0 12px;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    border-bottom: 1px solid #e0d5c8;
+    gap: 8px;
+}
+
+button {
+    cursor: pointer;
+    background: #115303;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 10px;
+}
+
+input {
+    padding: 6px;
+    margin-right: 6px;
+}
+
+select {
+    padding: 6px;
+    border-radius: 4px;
+}
+
+#total {
+    font-weight: bold;
+}
+
+#discount {
+    font-weight: bold;
+}
+
+.quantity-btn {
+    padding: 4px 9px;
+    margin: 0 3px;
+}
+
+.menu-image {
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>Cozy Sip Coffee Shop</h1>
+
+<h2>Menu</h2>
+<div id="menu"></div>
+
+<h2>Your Order</h2>
+
+<button id="clearOrder">Clear Order</button>
+
+<div id="cart"></div>
+
+<p id="total">Subtotal: ₱0</p>
+<p id="discount">Total Pay: ₱0</p>
+
+<label for="payment"><strong>Payment:</strong></label>
+<input
+    id="payment"
+    type="number"
+    placeholder="Enter payment"
+    min="0"
+    oninput="calculateChange()"
+>
+
+<p id="change">Change: ₱0</p>
+
+<br>
+
+<input id="name" placeholder="Your name">
+<button id="placeOrder">Place Order</button>
+
+<p id="message"></p>
+
+
+<script>
+
+// STEP 3: DATA
+
+const menu = [
+    { id: 1, name: 'Espresso', price: 80, imageid: "espresso.png"},
+    { id: 2, name: 'Cappuccino', price: 110, imageid: "cappuccino.png"},
+    { id: 3, name: 'Caffe Latte', price: 120, imageid: "latte.png"},
+    { id: 4, name: 'Iced Americano', price: 100, imageid: "americano.jpg"},
+    { id: 5, name: 'Blueberry Muffin', price: 70, imageid: "muffin.jpg"},
+    { id: 6, name: 'Milk Choco', price: 120, imageid: "choco.jpg" },
+    { id: 7, name: 'Java chip', price: 159, imageid: "java.jpg"},
+    { id: 8, name: 'Spanish latte', price: 135, imageid: "spanish.webp" },
+];
+
+let cart = JSON.parse(localStorage.getItem("coffeeCart")) || [];
+
+
+const sizePrices = {
+    Small: 0,
+    Medium: 20,
+    Large: 40
+};
+
+
+// STEP 4: SHOW THE MENU
+// CHALLENGE NO.6: SIZE DROPDOWN
+function showMenu() {
+
+    let html = '';
+
+    for (const item of menu) {
+
+        html += `
+        <div class='row'>
+
+            <img src="${item.imageid}"
+                 alt="${item.name}"
+                 class="menu-image"
+                 width="75"
+                 height="75">
+
+            <span>
+                ${item.name} - ₱${item.price}
+            </span>
+
+            <!-- SIZE DROPDOWN -->
+            <select id="size-${item.id}">
+                <option value="Small">Small +₱0</option>
+                <option value="Medium">Medium +₱20</option>
+                <option value="Large">Large +₱40</option>
+            </select>
+
+            <button onclick='addToCart(${item.id})'>
+                Add
+            </button>
+
+        </div>`;
+    }
+
+    document.getElementById('menu').innerHTML = html;
+}
+
+
+// STEP 5: ADD AND REMOVE
+
+function addToCart(id) {
+
+    const item = menu.find(m => m.id === id);
+
+    // Get selected size
+    const size = document.getElementById(`size-${id}`).value;
+
+    // Get additional price
+    const extraPrice = sizePrices[size];
+
+    // Calculate final price
+    const finalPrice = item.price + extraPrice;
+
+    // Check if same item AND same size already exists
+    const line = cart.find(c => c.id === id && c.size === size);
+
+    function saveCart() {
+    localStorage.setItem("coffeeCart", JSON.stringify(cart));
+}
+    if (line) {
+
+        line.qty++;
+
+    } else {
+
+        cart.push({
+            id: item.id,
+            name: item.name,
+            price: finalPrice,
+            size: size,
+            qty: 1
+        });
+
+    }
+
+    showCart();
+    saveCart();
+}
+
+
+function removeFromCart(id, size) {
+
+    cart = cart.filter(c => !(c.id === id && c.size === size));
+
+    showCart();
+    saveCart();
+}
+
+
+function changeQuantity(id, size, amount) {
+
+    const line = cart.find(c => c.id === id && c.size === size);
+
+    if (!line) return;
+
+    // Increase or decrease quantity
+    line.qty += amount;
+
+    // Remove the item when quantity reaches 0
+    if (line.qty <= 0) {
+
+        cart = cart.filter(c => !(c.id === id && c.size === size));
+
+    }
+
+    showCart();
+}
+
+// STEP 6: SHOW THE CART AND TOTAL
+
+function getTotal() {
+
+    let total = 0;
+
+    for (const line of cart) {
+
+        total += line.price * line.qty;
+
+    }
+
+    return total;
+}
+
+
+// CHALLENGE NO.4 DISCOUNT
+
+function getDiscount() {
+
+    let total = getTotal();
+
+    let discount = 0;
+
+    if (total >= 500) {
+
+        discount = total * 0.10;
+
+    }
+
+    return total - discount;
+}
+
+//CHALLENGE NO.7 PAYMENT AND CHANGE
+function calculateChange() {
+
+    const payment =
+        Number(document.getElementById('payment').value);
+
+    const totalPay = getDiscount();
+
+    const changeElement =
+        document.getElementById('change');
+
+    if (payment === 0 || payment < totalPay) {
+
+        changeElement.textContent =
+            'Change: ₱0';
+
+    } else {
+
+        const change = payment - totalPay;
+
+        changeElement.textContent =
+            'Change: ₱' + change;
+
+    }
+}
+
+
+function showCart() {
+
+    let html = '';
+
+    for (const line of cart) {
+
+        html += `
+        <div class='row'>
+
+            <span>
+                ${line.name}
+                <br>
+                <small>Size: ${line.size}</small>
+            </span>
+
+            <div>
+
+                <!-- Minus button -->
+                <button
+                    class="quantity-btn"
+                    onclick='changeQuantity(${line.id}, "${line.size}", -1)'>
+                    −
+                </button>
+
+                <!-- Quantity -->
+                <span>
+                    ${line.qty}
+                </span>
+
+                <!-- Plus button -->
+                <button
+                    class="quantity-btn"
+                    onclick='changeQuantity(${line.id}, "${line.size}", 1)'>
+                    +
+                </button>
+
+                <!-- Price -->
+                <span style="margin-left: 8px;">
+                    ₱${line.price * line.qty}
+                </span>
+
+                <!-- Remove button -->
+                <button
+                    onclick='removeFromCart(${line.id}, "${line.size}")'>
+                    Remove
+                </button>
+
+            </div>
+
+        </div>`;
+    }
+
+
+    if (cart.length === 0) {
+
+        html = '<p>No items yet.</p>';
+
+    }
+
+
+    document.getElementById('cart').innerHTML = html;
+
+
+    // Show subtotal
+    document.getElementById('total').textContent =
+        'Subtotal: ₱' + getTotal();
+
+
+    // Show discounted total
+    document.getElementById('discount').textContent =
+        'Total Pay: ₱' + getDiscount();
+
+    calculateChange();
+}
+
+
+// STEP 7: PLACE THE ORDER
+
+function placeOrder() {
+
+    const name =
+        document.getElementById('name').value.trim();
+
+    const message =
+        document.getElementById('message');
+
+
+    if (name === '') {
+
+        message.textContent =
+            'Please enter your name broski.';
+
+        return;
+
+    }
+
+
+    if (cart.length === 0) {
+
+        message.textContent =
+            'Your order is empty. Please add an item.';
+
+        return;
+
+    }
+
+
+    message.textContent =
+        `Thank you, ${name}! Your total is ₱${getTotal()}.
+         Discounted to 10%, So your Total Pay is ₱${getDiscount()}.
+         We are preparing your order Broski.`;
+
+
+    cart = [];
+
+    showCart();
+
+}
+
+
+// CHALLENGE NO.3 CLEAR ORDER
+
+function clearOrder() {
+
+    cart = [];
+
+    showCart();
+
+    document.getElementById('message').textContent =
+        'Your order has been cleared.';
+
+}
+
+
+// STEP 8: START
+
+document
+    .getElementById('placeOrder')
+    .addEventListener('click', placeOrder);
+
+document
+    .getElementById('clearOrder')
+    .addEventListener('click', clearOrder);
+
+
+showMenu();
+
+showCart();
+
+</script>
+
+</body>
+</html>
